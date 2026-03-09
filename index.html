@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout</title>
-    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/" data-cfasync="false"></script>
+    <meta name="rocket-loader" content="disabled">
     <style>
       * {
         box-sizing: border-box;
@@ -893,7 +894,7 @@
           </div>
 
           <div class="why-us">
-            <div class="why-us-title">Why Us?</div>
+            <div class="why-us-title">Why Usser?</div>
             <div class="why-us-item">
               <div class="why-us-icon green">✓</div>
               <div>
@@ -1586,26 +1587,15 @@
         });
         cardCvcEl.mount("#card-cvc-element");
 
-        // Focus styling on stripe-inp wrapper
-        [cardNumberEl, cardExpiryEl, cardCvcEl].forEach((el) => {
-          el.on(
-            "focus",
-            () =>
-              el._element &&
-              el._element.closest(".stripe-inp") &&
-              el._element
-                .closest(".stripe-inp")
-                .style.setProperty("border-color", "#197bbd"),
-          );
-          el.on(
-            "blur",
-            () =>
-              el._element &&
-              el._element.closest(".stripe-inp") &&
-              el._element
-                .closest(".stripe-inp")
-                .style.setProperty("border-color", "#c9cccf"),
-          );
+        const wrappers = [
+          { el: cardNumberEl, id: 'card-number-element' },
+          { el: cardExpiryEl, id: 'card-expiry-element' },
+          { el: cardCvcEl,    id: 'card-cvc-element' },
+        ];
+        wrappers.forEach(({ el, id }) => {
+          const wrap = document.getElementById(id);
+          el.on('focus', () => { if (wrap) wrap.style.borderColor = '#197bbd'; });
+          el.on('blur',  () => { if (wrap) wrap.style.borderColor = '#c9cccf'; });
         });
 
         // Billing toggle
